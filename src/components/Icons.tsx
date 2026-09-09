@@ -52,6 +52,12 @@ export const Github = ({ className }: IconProps) => (
   </svg>
 );
 
+export const Menu = ({ className }: IconProps) => (
+  <svg className={base(className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+
 export const Volume2 = ({ className }: IconProps) => (
   <svg className={base(className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z" />

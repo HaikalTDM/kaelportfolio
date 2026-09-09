@@ -110,7 +110,10 @@ function ProjectMockup({ project }: { project: Project }) {
 export default function HeroWork({ onOpenEnquiry }: Props) {
   const containerRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const heroCanvasRef = useRef<HTMLCanvasElement>(null);
   const prevIdxRef = useRef(-1);
+  // hero drawing should stop once we scroll into the showcase (saves CPU)
+  const heroVisibleRef = useRef(true);
 
   const [viewport, setViewport] = useState({ w: 1440, h: 900 });
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -154,6 +157,7 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
       if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
         const p = Math.min(1, Math.max(0, -rect.top / total));
         setScrollProgress(p);
+        heroVisibleRef.current = p < 0.16;
         if (p >= 0.16) {
           const idx = Math.min(
             PROJECTS.length - 1,
@@ -170,15 +174,93 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
       } else if (rect.top > 0) {
         setScrollProgress(0);
         setActiveIndex(0);
+        heroVisibleRef.current = true;
       } else {
         setScrollProgress(1);
         setActiveIndex(PROJECTS.length - 1);
+        heroVisibleRef.current = false;
       }
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Hero ambient field: soft drifting particles + expanding accent ripples.
+  useEffect(() => {
+    const canvas = heroCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reduced =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let raf = 0;
+    let t = 0;
+    // deterministic-ish particles, cheap
+    const N = 46;
+    const pts = Array.from({ length: N }, (_, i) => ({
+      x: hash(i * 7.13) * 1.4 - 0.2,
+      y: hash(i * 3.71) * 1.4 - 0.2,
+      s: 0.35 + hash(i * 1.9) * 0.9, // speed
+      p: hash(i * 5.3) * Math.PI * 2, // phase
+      r: 0.6 + hash(i * 2.3) * 1.6, // radius px
+      a: 0.15 + hash(i * 4.7) * 0.5, // alpha
+    }));
+
+    function hash(n: number) {
+      const s = Math.sin(n) * 43758.5453;
+      return s - Math.floor(s);
+    }
+
+    const render = () => {
+      t += 0.016;
+      const w = (canvas.width = canvas.offsetWidth);
+      const h = (canvas.height = canvas.offsetHeight);
+      ctx.clearRect(0, 0, w, h);
+      if (!heroVisibleRef.current) {
+        raf = requestAnimationFrame(render);
+        return;
+      }
+
+      const accent = PROJECTS[0].theme.accent; // hero always sits on the first project's tint
+      const cx = w * 0.68;
+      const cy = h * 0.42;
+
+      // drifting particles
+      for (let i = 0; i < N; i++) {
+        const p = pts[i];
+        const px = ((p.x + t * 0.02 * p.s) % 1.4) * (w / 1.4) - 0.2 * w;
+        const py = ((p.y + Math.sin(t * 0.5 * p.s + p.p) * 0.04) % 1.4) * (h / 1.4) - 0.2 * h;
+        ctx.globalAlpha = p.a * 0.5;
+        ctx.fillStyle = accent;
+        ctx.beginPath();
+        ctx.arc(px, py, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // expanding ripple rings from an off-center origin
+      for (let k = 0; k < 3; k++) {
+        const ph = (t * 0.12 + k / 3) % 1;
+        const rad = ph * Math.max(w, h) * 0.75;
+        ctx.globalAlpha = (1 - ph) * 0.08;
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(render);
+    };
+
+    if (reduced) return; // static hero for reduced motion
+    raf = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const goTo = (idx: number) => {
@@ -328,6 +410,7 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
                 className="absolute inset-0 bg-void pointer-events-none transition-opacity duration-150"
                 style={{ opacity: 1 - heroVideoBlend }}
               >
+                <canvas ref={heroCanvasRef} className="absolute inset-0 w-full h-full block opacity-70" />
                 <div
                   className="absolute"
                   style={{
@@ -382,7 +465,7 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
 
               {/* HERO CONTENT (full-screen; fades as card shrinks) */}
               <div
-                className="absolute inset-0 z-30 flex flex-col justify-end p-6 md:p-14 lg:p-16 pb-12 md:pb-16 pointer-events-none transition-opacity duration-200"
+                className="absolute inset-0 z-30 flex flex-col justify-center md:justify-end p-6 md:p-14 lg:p-16 pb-10 md:pb-16 pointer-events-none transition-opacity duration-200"
                 style={{ opacity: heroOpacity, display: heroOpacity <= 0.01 ? 'none' : 'flex' }}
               >
                 <div className="relative z-10 max-w-xl pointer-events-auto">
