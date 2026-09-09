@@ -321,7 +321,7 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
         style={{ backgroundColor: scrollProgress >= 0.16 ? activeProject.theme.bg : '#080808' }}
       >
         {/* 3-column surrounding UI (visible once showcase settles) */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-8 items-center max-w-7xl mx-auto w-full px-6 md:px-12 pt-20 pb-8 relative z-10 pointer-events-none">
+        <div className="flex-1 flex flex-col md:grid grid-cols-1 md:grid-cols-12 gap-8 items-center justify-between md:items-center max-w-7xl mx-auto w-full px-6 md:px-12 pt-20 pb-8 relative z-10 pointer-events-none">
           {/* Left: title */}
           <div
             className="md:col-span-3 flex flex-col justify-center relative min-h-[140px] transition-opacity duration-300 min-w-0"
@@ -357,8 +357,8 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
                   className="col-start-1 row-start-1 space-y-4 transition-opacity duration-500 ease-in-out"
                   style={{ opacity: activeIndex === idx ? 1 : 0 }}
                 >
-                  <p className="text-paper/90 text-sm font-light leading-relaxed">{p.description}</p>
-                  <div className="w-full h-px bg-white/15" />
+                  <p className="hidden md:block text-paper/90 text-sm font-light leading-relaxed">{p.description}</p>
+                  <div className="hidden md:block w-full h-px bg-white/15" />
                   <span className="block text-[11px] font-mono tracking-widest uppercase font-semibold" style={{ color: p.theme.accent }}>
                     {p.type}
                   </span>
