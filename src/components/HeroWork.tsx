@@ -355,7 +355,7 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
                 <div
                   key={p.id}
                   className="col-start-1 row-start-1 space-y-4 transition-opacity duration-500 ease-in-out"
-                  style={{ opacity: activeIndex === idx ? 1 : 0 }}
+                  style={{ opacity: activeIndex === idx ? 1 : 0, pointerEvents: activeIndex === idx ? 'auto' : 'none' }}
                 >
                   <p className="hidden md:block text-paper/90 text-sm font-light leading-relaxed">{p.description}</p>
                   <div className="hidden md:block w-full h-px bg-white/15" />
