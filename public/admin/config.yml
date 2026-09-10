@@ -1,0 +1,85 @@
+backend:
+  name: github
+  repo: HaikalTDM/kaelportfolio
+  branch: main
+  # Replace with your deployed URL (no trailing slash). Used for GitHub OAuth.
+  base_url: https://YOUR-SITE.vercel.app
+  auth_endpoint: api/auth
+
+# Lets you edit locally with `npx decap-server` (no GitHub login needed).
+local_backend: true
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    files:
+      - name: projects
+        label: Showcase Projects
+        file: src/content/projects.json
+        fields:
+          - name: projects
+            label: Projects
+            label_singular: Project
+            widget: list
+            summary: '{{title}} — {{type}}'
+            fields:
+              - { name: id, label: ID (unique, no spaces), widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: type, label: Type, widget: string }
+              - { name: description, label: Description, widget: text }
+              - name: theme
+                label: Theme
+                widget: object
+                fields:
+                  - { name: bg, label: Background, widget: color, default: '#080808' }
+                  - { name: accent, label: Accent, widget: color, default: '#ef4444' }
+              - name: canvasPattern
+                label: Canvas Pattern
+                widget: select
+                options: [rings, waves, grid, topography, particles]
+                default: rings
+              - name: video
+                label: Video path
+                widget: string
+                required: false
+                hint: 'Drop the file in public/videos, then enter e.g. /videos/name.webm'
+              - name: ui
+                label: Card UI Text
+                widget: object
+                fields:
+                  - { name: tag, label: Tag, widget: string }
+                  - { name: headline, label: Headline, widget: string }
+                  - { name: sub, label: Sub, widget: string }
+              - name: specs
+                label: Specs
+                widget: object
+                fields:
+                  - { name: role, label: Role, widget: string, default: 'Design + Build' }
+                  - { name: status, label: Status, widget: string }
+                  - { name: linkLabel, label: Link Label, widget: string }
+                  - { name: link, label: Live Link, widget: string }
+                  - { name: repo, label: Repo Link, widget: string, required: false }
+                  - { name: deadpoolNote, label: Note, widget: string }
+
+  - name: site
+    label: Site Settings
+    files:
+      - name: site
+        label: Identity & Contact
+        file: src/content/site.json
+        fields:
+          - { name: brand, label: Brand, widget: string }
+          - { name: name, label: Full Name, widget: string }
+          - { name: persona, label: Persona, widget: string }
+          - { name: role, label: Role, widget: string }
+          - { name: location, label: Location, widget: string }
+          - { name: whatsapp, label: WhatsApp (digits, intl, no +), widget: string }
+          - { name: whatsappLabel, label: WhatsApp (display), widget: string }
+          - { name: email, label: Email, widget: string }
+          - { name: github, label: GitHub URL, widget: string }
+          - { name: threads, label: Threads URL, widget: string }
+          - { name: photo, label: Portrait, widget: image, default: '/images/haikal.webp' }

@@ -39,7 +39,7 @@ export default function About() {
         <div className="md:col-span-4 flex flex-col">
           <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#111] shadow-2xl">
             <img
-              src="/images/haikal.webp"
+              src={site.photo}
               alt={`${site.name} — ${site.role}`}
               className="w-full h-full object-cover contrast-125"
             />

@@ -314,8 +314,19 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
 
   const stackStep = curH + 8; // include a small seam between project tiles
 
+  // Section height scales with project count so each project keeps a consistent
+  // scroll distance. More projects = taller section = same feel, no rush.
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const sectionHeightVh = 120 + PROJECTS.length * 120;
+  const activeIndexLabel = `${pad(activeIndex + 1)} / ${pad(PROJECTS.length)}`;
+
   return (
-    <section ref={containerRef} id="work" className="relative h-[480vh] w-full bg-void">
+    <section
+      ref={containerRef}
+      id="work"
+      className="relative w-full bg-void"
+      style={{ height: `${sectionHeightVh}vh` }}
+    >
       <div
         className="sticky top-0 h-screen w-full flex flex-col justify-between transition-colors duration-700 overflow-hidden"
         style={{ backgroundColor: scrollProgress >= 0.16 ? activeProject.theme.bg : '#080808' }}
@@ -553,7 +564,7 @@ export default function HeroWork({ onOpenEnquiry }: Props) {
             ))}
           </div>
 
-          <span className="text-paper/60">{activeProject.index}</span>
+          <span className="text-paper/60">{activeIndexLabel}</span>
         </div>
       </div>
     </section>
