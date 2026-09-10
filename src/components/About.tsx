@@ -37,12 +37,16 @@ export default function About() {
       <div className="max-w-6xl mx-auto grid md:grid-cols-12 gap-12 lg:gap-16 items-start relative z-10">
         {/* Left: portrait */}
         <div className="md:col-span-4 flex flex-col">
-          <div className="group relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#111] shadow-2xl">
+          <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#111] shadow-2xl">
             <img
               src="/images/haikal.webp"
               alt={`${site.name} — ${site.role}`}
-              className="w-full h-full object-cover grayscale contrast-125 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
+              className="w-full h-full object-cover contrast-125"
             />
+            {/* looping 45° shine sweep */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="shine-strip" />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
               <div>

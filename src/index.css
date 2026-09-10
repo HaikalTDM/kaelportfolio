@@ -4,7 +4,7 @@
 @theme {
   --color-void: #080808;
   --color-paper: #f1eee7;
-  --color-coral: #ff785b;
+  --color-coral: #ef4444;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
@@ -37,7 +37,7 @@ body {
 }
 
 ::selection {
-  background-color: #ff785b;
+  background-color: #ef4444;
   color: #080808;
 }
 
@@ -53,7 +53,7 @@ body {
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff785b;
+  background: #ef4444;
 }
 
 /* Modal Animation & Backdrop */
@@ -72,6 +72,35 @@ dialog::backdrop {
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
+  }
+}
+
+/* Looping 45° shine sweep over the portrait */
+.shine-strip {
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 60%;
+  height: 220%;
+  transform: rotate(45deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 100%
+  );
+  animation: shineSweep 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes shineSweep {
+  0% {
+    transform: translateX(-180%) rotate(45deg);
+  }
+  55%,
+  100% {
+    transform: translateX(420%) rotate(45deg);
   }
 }
 

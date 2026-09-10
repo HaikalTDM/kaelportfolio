@@ -24,7 +24,7 @@ export default function App() {
       <div
         className="pointer-events-none fixed inset-0 z-30 transition-opacity duration-500 opacity-60 hidden md:block"
         style={{
-          background: `radial-gradient(600px circle at ${cursorPos.x}px ${cursorPos.y}px, rgba(255, 120, 91, 0.04), transparent 80%)`,
+          background: `radial-gradient(600px circle at ${cursorPos.x}px ${cursorPos.y}px, rgba(239, 68, 68, 0.04), transparent 80%)`,
         }}
       />
 
